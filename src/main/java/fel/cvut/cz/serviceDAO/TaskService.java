@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class Task {
+public class TaskService {
 
     @Autowired
     private MembershipService membershipService;        // dependency injection
@@ -20,7 +20,7 @@ public class Task {
     @PersistenceContext
     EntityManager em;
 
-    public Task(EntityManager em) {
+    public TaskService(EntityManager em) {
         this.em = em;
     }
 
