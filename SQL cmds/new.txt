@@ -1,0 +1,94 @@
+----- SELECT COMMANDS -------
+
+
+SELECT * FROM person;
+SELECT * FROM employee;
+SELECT * FROM supervise;
+SELECT * FROM workoutclass WHERE "name" = 'PowerLifting';
+SELECT * FROM takeclass;
+SELECT * FROM INVOICE;
+
+--- DELETE ALL -----
+-- DELETE FROM TakeClass *;
+-- DELETE FROM WorkoutClass *;
+-- DELETE FROM TrainersLicense *;
+-- DELETE FROM Membership *;
+-- DELETE FROM Invoice *;
+-- DELETE FROM Supervise *;
+-- DELETE FROM Employee *;
+-- DELETE FROM Trainer *;
+-- DELETE FROM Customer *;
+-- DELETE FROM Person *;
+
+--- outer join ---
+/*
+Joins table Person and Membership on same nationalid of person/customer and only person from city Hluk. 
+Result is rows selected by SELECT clause when they meet condition and also row where one of
+conditions is missing.
+*/
+SELECT person.firstname, person.lastname, person.city ,membership.membershiptype 
+FROM membership 
+FULL OUTER JOIN person
+ON (person.nationalid = membership.customer) 
+WHERE (person.city = 'Hluk');
+
+--- inner join ---
+/*
+Joins table Person and WorkoutClass on same nationalid of person/teacher. Result 
+contains only persons who match some teacher in workoutclasses. And where capacity < 10.
+*/
+SELECT person.*, workoutclass.name, workoutclass.capacity 
+FROM person 
+INNER JOIN workoutclass
+ON (person.nationalid = workoutclass.teacher) 
+WHERE (workoutclass.capacity < 10);
+
+--- condition on data ---
+/*
+SELECT all workoutclasses that start after 12:00:00.
+*/
+SELECT * FROM workoutclass 
+WHERE (workoutclass."time" >= '12:00:00');
+
+--- agregaci a podmínku na hodnotu agregační funkce ---
+/*
+Takes all types of classes and compute average price, which each customer paid for this type of class. Then
+filter those having average > 12 and order them in acending order by average.
+*/
+SELECT takeclass.name, AVG(takeclass.price) AS average
+FROM takeclass
+GROUP BY takeclass.name
+HAVING AVG(takeclass.price) > 12
+ORDER BY average;
+
+--- řazení a stránkování ---
+/*
+SELECT all membershiptypes only once and order them in ascendend order.
+*/
+SELECT DISTINCT membershiptype FROM membership
+ORDER BY membershiptype ASC;
+
+--- množinové operace ---
+
+
+--- vnořený SELECT ---
+/*
+Query returns table with first name and last name of employee and his position.
+*/
+SELECT p.firstName, p.lastName, 
+	(
+		SELECT e.workposition 
+		FROM employee e
+		WHERE (p.nationalid = e.nationalid) AND (e.salary > 6000)
+	)
+FROM person AS p;
+
+SELECT p.firstName, p.lastName, e.workposition,
+	(
+		SELECT * 
+		FROM invoice i
+		WHERE (i.employee = e.nationalid) AND (i.dateofissue >= '2023-05-05')
+	)
+FROM person AS p
+JOIN employee AS e ON e.nationalid = p.nationalid;
+
