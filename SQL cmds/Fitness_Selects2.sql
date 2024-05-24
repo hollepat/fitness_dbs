@@ -36,10 +36,10 @@ $$
 LANGUAGE plpgsql;
 
 BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-SELECT addMember('100918/9376', '003 558 328', 'Anežka', 'Soukupová', 'Liberec', 'Sadová', '458 98', 'Basic');
+SELECT addMember('100918/9376', '003 558 328', 'Marketa', 'Holubova', 'Liberec', 'Sadová', '458 98', 'Basic');
 COMMIT TRANSACTION;
 
-SELECT * FROM person WHERE (person.firstname = 'Anežka') and (person.lastname = 'Soukupová');
+SELECT * FROM person WHERE (person.firstname = 'Marketa') and (person.lastname = 'Holubova');
  
 -------- view --------
 /* View containing all PowerLifting classes.*/
